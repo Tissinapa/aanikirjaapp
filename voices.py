@@ -1,44 +1,49 @@
 import pyttsx3
 import PyPDF2
 
+class VoiceAssistant:
+    def __init__(self):
+        self.engine = pyttsx3.init()
 
-def invalid_Input():
-    engine = pyttsx3.init()
-    engine.say("Fuck you")
-    engine.runAndWait()
-    engine.say("Invalid input")
-    engine.runAndWait()
-    return None
+    def invalid_Input(self):
+        
+        self.engine.say("Fuck you. Invalid input")
+        self.engine.runAndWait()
+        return None
 
-def start():
-    engine = pyttsx3.init()
-    engine.say("Let's start")
-    engine.runAndWait()
-    return None
+    def start(self):
+        
+        self.engine.say("Let's start")
+        self.engine.runAndWait()
+        return None
 
-def goodbye():
-    engine = pyttsx3.init()
-    engine.say("Goodbye. Wait! Fuck you")
-    engine.runAndWait()
+    def goodbye(self):
 
-    return None
+        self.engine.say("Goodbye. Wait! Fuck you")
+        self.engine.runAndWait()
 
-def text_from_user(text):
-    engine = pyttsx3.init()
-    engine.say(text)
-    engine.runAndWait()
-    return None
+        return None
 
-def speaks_in_pdf(pdf_file):
-    engine = pyttsx3.init()
-    reader = PyPDF2.PdfReader(pdf_file)
-    full_text= ""
-    for page_num in range(len(reader.pages)):
-        page = reader.pages[page_num]
-        full_text += page.extract_text()
-    
-    engine.say(full_text)
-    engine.runAndWait()
-    
-    
-    return None
+    def text_from_user(self, text):
+        
+        self.engine.say(text)
+        self.engine.runAndWait()
+        return None
+
+    def speaks_in_pdf(self, pdf_file):
+        
+        try: 
+            reader = PyPDF2.PdfReader(pdf_file)
+            full_text= ""
+            for page_num in range(len(reader.pages)):
+                page = reader.pages[page_num]
+                full_text += page.extract_text()
+            
+            self.engine.say(full_text)
+            self.engine.runAndWait()
+        except: 
+            print("PDF file not found.")
+            self.engine.say("PDF file not found")
+            self.engine.runAndWait()
+        
+        return None

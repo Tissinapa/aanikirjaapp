@@ -1,6 +1,4 @@
-
-import voices
-
+from voices import VoiceAssistant
 
 def menu():
     
@@ -20,6 +18,7 @@ def give_pdf_file():
     return users_pdf_file
 
 def main():
+    voices = VoiceAssistant()
     voices.start()
     
     user_input = None
@@ -40,4 +39,5 @@ def main():
         else:
             voices.invalid_Input()
             
-main()
+if __name__ == "__main__":
+    main()
