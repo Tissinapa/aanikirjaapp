@@ -4,8 +4,8 @@ def menu():
     
     print("1) Insert text")
     print("2) Insert pdf file")
-    print("3) Play")
-    print("4) End")
+    print("3) Play/Pause")
+    print("0) End")
     user_input=input("Your choice: ")
     return user_input
 
@@ -28,14 +28,24 @@ def main():
         if user_input == "1":
             some_text = give_text()
             voices.text_from_user(some_text)
+        # get pdf file and convert it
         elif user_input == "2":
             some_pdf_file = give_pdf_file()
-            voices.speaks_in_pdf(some_pdf_file) 
+            voices.pdf_to_mp3(some_pdf_file) 
         elif user_input == "3":
-            print("1")
+            if voices.paused.is_set():
+                voices.pause()
+                print("Paused")
+            else:
+                voices.resume()
+                print("Resume")
+        elif user_input == "stop":
+            voices.stop()
+            print("Stopped")
+
         elif user_input == "0":
             voices.goodbye()
-            return 
+            break 
         else:
             voices.invalid_Input()
             
