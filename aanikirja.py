@@ -1,10 +1,8 @@
-##from voices import VoiceAssistant
+
 
 import pyttsx3
 import PyPDF2
 from threading import *
-##from pydub import AudioSegment
-##from pydub.playback import play
 import pygame
 import time
 import tempfile
@@ -18,7 +16,6 @@ class VoiceAssistant:
         self.is_paused = False
         self.is_playing = False
         self.file_validate = None
-        #self.audio_thread = None
         self.audio_file = None
         self.start_pygame = pygame.mixer.init()
 
@@ -52,20 +49,20 @@ class VoiceAssistant:
     def pdf_to_mp3(self, pdf_file):
         
         try: 
-            #new_pdfmp3_name = pdf_file.replace(".pdf", ".wav")
+            
             self.audio_file = pdf_file
             
             print(self.audio_file)
             reader = PyPDF2.PdfReader(pdf_file)
             pdf_text = ""
             for page in reader.pages:
-                pdf_text += page.extract_text() +"\n"
+                pdf_text += page #+"\n"
 
             #convert to mp3
             self.engine.save_to_file(pdf_text, self.audio_file)
             self.engine.runAndWait()
             print(f"PDF file converted to {self.audio_file}")
-            #self.audio_segment = pygame.mixer.music
+            
             
         except FileNotFoundError: 
             print("PDF file not found.")
@@ -79,36 +76,41 @@ class VoiceAssistant:
     
     
     def play_mp3(self):
-        if not self.is_playing:  # If not already playing
-            if self.is_paused:  # If paused, unpause
+        if self.audio_file == None:
+            self.engine.say("Please input pdf file.")
+            self.engine.runAndWait()
+            return 
+        if not self.is_playing:  
+            if self.is_paused:  
                 pygame.mixer_music.unpause()
                 self.is_paused = False
-            else:  # Start playing from the beginning or a specific position
+            else: 
                 pygame.mixer_music.load(self.audio_file)
                 pygame.mixer_music.play(loops=0, fade_ms=1000)
             self.is_playing = True
-        else:  # If already playing, toggle pause
+        else:  
             self.pause_mp3()
 
     def pause_mp3(self):
-        if not self.is_paused:  # If not already paused
+        if not self.is_paused:  
             pygame.mixer_music.pause()
             self.is_paused = True
             self.is_playing = False
 
     def stop_mp3(self):
         pygame.mixer_music.stop()
-
+        return 
 
 def menu():
-    
     print("1) Insert text")
     print("2) Insert pdf file")
     print("Play")
     print("Pause")
+    print("Stop")
     print("0) End")
     user_input=input("Your choice: ")
-    return user_input
+    print()
+    return user_input.lower()
 
 def give_text():
     users_text = input("Enter text here: ")
@@ -140,13 +142,12 @@ def main():
             validate_pdf(some_text)
             if validate_pdf == True:
                 voices.text_from_user(some_text)
-        # get pdf file and convert it
         elif user_input == "2":
             some_pdf_file = give_pdf_file()
             voices.pdf_to_mp3(some_pdf_file) 
-        elif user_input == "Play":
+        elif user_input == "play":
             voices.play_mp3()
-        elif user_input == "Pause":
+        elif user_input == "pause":
             voices.pause_mp3()
         elif user_input == "stop":
             voices.stop_mp3()
